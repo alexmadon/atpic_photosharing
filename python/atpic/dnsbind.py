@@ -1,0 +1,122 @@
+"""
+python-adns - Python bindings to the asynchronous DNS resolver library
+python-dns - pydns - DNS client module for Python
+python-musicdns - Python bindings for the MusicIP service
+python-musicdns-dbg - debug symbols for the MusicIP Python bindings
+python-twisted-names - A DNS protocol implementation with client and server
+python-dnspython - DNS toolkit for Python
+
+python-dnspython 
+http://www.gnu-darwin.org/www001/src/ports/dns/py-dnspython/work/dnspython-1.5.0/tests/message.py
+http://www.dnspython.org/kits/1.7.1/
+http://www.dnspython.org/docs/1.7.1/html/dns.message-module.html
+http://www.sfr-fresh.com/unix/www/webcleaner-2.41.tar.gz:a/webcleaner-2.41/wc/dns/tests/test_zone.py
+http://www.dnspython.org/docs/1.7.1/html/dns.message.Message-class.html
+http://www.dnspython.org/docs/1.7.1/html/dns.message-module.html
+
+dns.message.from_text
+dns.message.from_wire
+
+1) start the server
+python dnsat.py
+
+2) make queries
+dig -p 5353 atpic.com @localhost
+
+3) load test:
+
+for i in `seq 1 10000`; do echo "atpic.com A" >> testdata; done
+
+dnsperf -s 127.0.0.1 -p 5353 -d testdata
+
+  Queries per second:   355.959939 qps
+
+with asyncore
+
+  Queries per second:   743.682473 qps
+
+"""
+
+
+import Strangle
+import socket, traceback
+import signal, os
+import asyncore
+
+# import psyco # package python-psyco 
+# psyco.full()
+
+
+def handler(signum, frame):
+    print "Signal handler called with signal", signum
+    print "I should reinsert the config IP"
+
+
+def myprint(mes):
+    # print mes
+    pass
+
+
+
+# see DatagramServerChannel
+# at http://acs.lbl.gov/~dang/tmp/NetLogger/source/socketserver.html
+class AsyncDNS(asyncore.dispatcher):
+    def __init__(self):
+        asyncore.dispatcher.__init__(self)
+        signal.signal(signal.SIGHUP, handler)
+        pid=os.getpid()
+        print "PID=%s" % pid
+        print "to kill me, use: kill -HUP %s" % pid
+        host = '127.0.0.1' 
+        # host = "0.0.0.0" # if we want to bind on all possible IP addresses
+        port = 5353
+        print "binding %s %s" % (host,port)
+	self.create_socket (socket.AF_INET, socket.SOCK_DGRAM)
+        self.set_reuse_addr()
+        self.bind((host, port))
+
+    def handle_read(self):
+        try:
+            message, address = self.socket.recvfrom(8192)
+            message=Strangle.DNSMessage(message)
+            print message
+            response=make_response(message)
+            self.socket.sendto(response.to_wire(), address)
+
+        except socket.timeout:
+            pass
+        except (KeyboardInterrupt, SystemExit):
+            raise
+        except socket.error, x:
+            errno= x.args[0]
+            msg = x.args[1]
+            if errno==4:
+                print "I received a  (4, 'Interrupted system call'), continuing"
+            else:
+                traceback.format_exc()
+
+        except:
+            traceback.format_exc()
+
+    def writable(self):
+        """False for UDP"""
+        return False
+
+    def handle_accept(self):
+        """pass for UDP"""
+        pass
+
+    def handle_connect(self):
+        """pass for UDP"""
+        pass
+    
+    def handle_close(self):
+        """pass for UDP"""
+        pass
+
+
+if __name__ == "__main__":
+    d = AsyncDNS()
+
+    asyncore.loop()
+

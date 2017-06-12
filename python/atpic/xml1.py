@@ -1,0 +1,1 @@
+    xmldoc = minidom.parseString(xml)
