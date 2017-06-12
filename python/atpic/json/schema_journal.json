@@ -1,0 +1,26 @@
+{ 
+    "template" : "log*",
+    "settings" : {
+        "number_of_shards" : 4
+    },
+    "mappings" : {
+	"journal" : {
+	    "dynamic_templates" : [
+		{
+		    "template_dir" : {
+			"match" : "dir_*",
+			"mapping" : {"store" : "no","type" : "string", "index" : "not_analyzed"}
+		    }
+		}
+	    ],
+	    "properties" : {
+		"uuid" : { "type" : "string", "store" : "yes", "index" : "not_analyzed" },
+		"uid" : {"type" : "long", "store" : "yes" },
+		"aid" : {"type" : "long", "store" : "yes" },
+		"datestore" : {"type" : "date", "store" : "yes"},
+		"data" : { "type" : "string", "store" : "yes", "index" : "not_analyzed" }
+	    }	
+	}
+	
+    }
+}

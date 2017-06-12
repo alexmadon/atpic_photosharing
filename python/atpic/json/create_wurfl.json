@@ -1,0 +1,29 @@
+{
+    "index" : {
+	"settings" : {
+            "number_of_shards" : 1,
+            "number_of_replicas" : 3
+	},
+	"analysis" : {
+	    "analyzer" : {
+		"myAnalyzer2" : {
+		    "type" : "custom",
+		    "tokenizer" : "Whitespace",
+		    "filter" : ["myTokenFilter1"]
+		}
+	    },
+	    "tokenizer" : {
+		"Whitespace" : {
+		    "type" : "whitespace"
+		}
+	    },
+	    "filter" : {
+		"myTokenFilter1" : {
+		    "type" : "shingle",
+		    "max_shingle_size" : "4"
+		}
+	    }
+	}
+    }
+}
+

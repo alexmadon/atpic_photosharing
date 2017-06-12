@@ -1,0 +1,15 @@
+{ "agent" : {
+    "properties" : {
+	"_id" : {"type" : "string", "store" : "yes"},
+	"ua" : {"type" : "string", "store" : "yes", "index" : "analyzed", "analyzer" : "myAnalyzer2" },
+	"fb" : {"type" : "string", "store" : "yes", "index" : "no"},
+	"mw" : {"type" : "short", "store" : "yes", "index" : "no"},
+	"mh" : {"type" : "short", "store" : "yes", "index" : "no"},
+	"rw" : {"type" : "short", "store" : "yes", "index" : "no"},
+	"rh" : {"type" : "short", "store" : "yes", "index" : "no"},
+	"iw" : {"type" : "boolean", "store" : "yes", "index" : "no"},
+	"xs" : {"type" : "short", "store" : "yes", "index" : "no"},
+	"pm" : {"type" : "string", "store" : "yes", "index" : "no"}
+    }
+}
+}

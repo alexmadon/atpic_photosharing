@@ -1,0 +1,104 @@
+{ 
+    "pic" : {
+        "dynamic_templates" : [
+            {
+                "template_pathstore" : {
+                    "match" : "pathstore*",
+                    "mapping" : {
+                        "store" : "yes",
+                        "type" : "string",
+                        "index" : "no"
+			
+                    }
+		}
+	    },
+            {
+                "template_dir" : {
+                    "match" : "dir_*",
+                    "mapping" : {
+                        "store" : "no",
+                        "type" : "string",
+                        "index" : "not_analyzed"
+			
+                    }
+		}
+	    },
+	    {
+                "template_vdir" : {
+		    "match" : "vdir_*",
+		    "mapping" : {
+                        "store" : "no",
+                        "type" : "string",
+                        "index" : "not_analyzed"
+			
+		    }
+		}
+	    }
+	],
+	"properties" : {
+	    "_id" : {"type" : "long", "store" : "yes"},
+	    "uid" : {"type" : "long", "store" : "yes" },
+	    "gid" : {"type" : "long", "store" : "yes" },
+	    "pid" : {"type" : "long", "store" : "yes" },
+	    "width" : {"type" : "long", "store" : "yes" },
+	    "height" : {"type" : "long", "store" : "yes" },
+	    "duration" : {"type" : "float", "store" : "yes" },
+	    "username" : {"type" : "string", "store" : "yes", "index" : "not_analyzed"},
+	    "popularity" : {"type" : "float", "store" : "yes" },
+	    "servershort" : {"type" : "string", "store" : "yes", "index" : "not_analyzed"},
+	    "gallery" : {"type" : "long", "store" : "yes"},
+	    "location" : {"type" : "geo_point", "store" : "yes"},
+	    "licence" : {"type" : "string", "store" : "yes", "index" : "not_analyzed"},
+	    "dir" : {"type" : "string", "store" : "yes", "index" : "analyzed", "analyzer" : "whitespace"},
+	    "depth" : {"type" : "string", "store" : "yes", "index" : "analyzed", "analyzer" : "whitespace"},
+	    "path" : {"type" : "string", "store" : "yes", "index" : "not_analyzed"},
+	    "pathtext" : {"type" : "string", "store" : "yes", "index" : "not_analyzed"},
+	    "year" : {"type" : "string", "store" : "yes", "index" : "not_analyzed"},
+	    "yearmonth" : {"type" : "string", "store" : "yes", "index" : "not_analyzed"},
+	    "yearmonthday" : {"type" : "string", "store" : "yes", "index" : "not_analyzed"},
+	    "yearmonthdaytime" : {"type" : "string", "store" : "yes", "index" : "not_analyzed"},
+
+	    "datestore" : {"type" : "date", "store" : "yes", "index" : "no"},
+
+	    "coord_1" : {"type" : "byte", "store" : "no", "index" : "not_analyzed"},
+	    "coord_2" : {"type" : "byte", "store" : "no", "index" : "not_analyzed"},
+	    "coord_3" : {"type" : "byte", "store" : "no", "index" : "not_analyzed"},
+	    "coord_4" : {"type" : "byte", "store" : "no", "index" : "not_analyzed"},
+	    "coord_5" : {"type" : "short", "store" : "no", "index" : "not_analyzed"},
+	    "coord_6" : {"type" : "short", "store" : "no", "index" : "not_analyzed"},
+	    "coord_7" : {"type" : "short", "store" : "no", "index" : "not_analyzed"},
+	    "coord_8" : {"type" : "short", "store" : "no", "index" : "not_analyzed"},
+	    "coord_9" : {"type" : "integer", "store" : "no", "index" : "not_analyzed"},
+	    "coord_10" : {"type" : "integer", "store" : "no", "index" : "not_analyzed"},
+	    "coord_11" : {"type" : "integer", "store" : "no", "index" : "not_analyzed"},
+	    "coord_12" : {"type" : "integer", "store" : "no", "index" : "not_analyzed"},
+	    "coord_13" : {"type" : "integer", "store" : "no", "index" : "not_analyzed"},
+	    "coord_14" : {"type" : "integer", "store" : "no", "index" : "not_analyzed"},
+	    "coord_15" : {"type" : "integer", "store" : "no", "index" : "not_analyzed"},
+	    "coord_16" : {"type" : "long", "store" : "no", "index" : "not_analyzed"},
+	    "coord_17" : {"type" : "long", "store" : "no", "index" : "not_analyzed"},
+	    "coord_18" : {"type" : "long", "store" : "no", "index" : "not_analyzed"},
+	    "coord_19" : {"type" : "long", "store" : "no", "index" : "not_analyzed"},
+	    "coord_20" : {"type" : "long", "store" : "no", "index" : "not_analyzed"},
+	    "coord_21" : {"type" : "long", "store" : "no", "index" : "not_analyzed"},
+	    "coord_22" : {"type" : "long", "store" : "no", "index" : "not_analyzed"},
+	    "coord_23" : {"type" : "long", "store" : "no", "index" : "not_analyzed"},
+	    "coord_24" : {"type" : "long", "store" : "no", "index" : "not_analyzed"},
+	    "coord_25" : {"type" : "long", "store" : "no", "index" : "not_analyzed"},
+	    "coord_26" : {"type" : "long", "store" : "no", "index" : "not_analyzed"},
+
+
+	    "price" : {"type" : "float", "store" : "yes"},
+	    "f" : {"type" : "byte", "store" : "yes"},
+	    "speed" : {"type" : "short", "store" : "yes"},
+	    "mode" : {"type" : "string", "store" : "yes", "index" : "not_analyzed"},
+	    "mime" : {"type" : "string", "store" : "yes", "index" : "not_analyzed"},
+	    "originalname" : {"type" : "string", "store" : "yes", "index" : "not_analyzed"},
+	    "extension" : {"type" : "string", "store" : "yes", "index" : "no" },
+	    "gtitle" : {"type" : "string", "store" : "yes", "index" : "no"},
+	    "ptitle" : {"type" : "string", "store" : "yes", "index" : "no" },
+	    "phrases" : {"type" : "string", "store" : "yes", "index" : "analyzed", "analyzer" : "whitespace"},
+	    "randoms" : {"type" : "string", "store" : "yes", "index" : "analyzed", "analyzer" : "whitespace"}
+	}
+    }
+}

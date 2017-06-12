@@ -1,0 +1,9 @@
+{ 
+    "path" : {
+ 	"properties" : {
+	    "id" : { "type" : "string", "store" : "yes", "index" : "not_analyzed" },
+	    "uid" : {"type" : "long", "store" : "yes" },
+	    "parent" : { "type" : "string", "store" : "yes", "index" : "not_analyzed" }
+	}
+    }
+}

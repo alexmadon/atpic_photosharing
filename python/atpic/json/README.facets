@@ -1,0 +1,215 @@
+Let’s try it out with a simple example. Suppose we have a number of articles with a field called tags, preferably analyzed with the keyword analyzer. The facet aggregation will return counts for the most popular tags across the documents matching your query — or across all documents in the index.
+
+We will store some example data first:
+
+curl -X DELETE "http://localhost:9200/articles"
+curl -X POST "http://localhost:9200/articles/article" -d '{"title" : "One",   "tags" : ["foo"]}'
+curl -X POST "http://localhost:9200/articles/article" -d '{"title" : "Two",   "tags" : ["foo", "bar"]}'
+curl -X POST "http://localhost:9200/articles/article" -d '{"title" : "Three", "tags" : ["foo", "bar", "baz"]}'
+
+
+curl -X POST "http://localhost:9200/articles/article/some/path" -d '{"title" : "One",   "tags" : ["foo"]}'
+
+
+Now, let’s query the index for articles beginning with letter “T” and retrieve a terms facet for the tags field. We will name the facet simply: tags.
+
+curl -X POST "http://localhost:9200/articles/_search?pretty=true" -d '
+  {
+    "query" : { "query_string" : {"query" : "T*"} },
+    "facets" : {
+      "tags" : { "terms" : {"field" : "tags"} }
+    }
+  }
+'
+
+This request will return articles “Two” and “Three” (because they match our query), as well as the tags facet:
+
+"facets" : {
+  "tags" : {
+    "_type" : "terms",
+    "missing" : 0,
+    "total": 5,
+    "other": 0,
+    "terms" : [ {
+      "term" : "foo",
+      "count" : 2
+    }, {
+      "term" : "bar",
+      "count" : 2
+    }, {
+      "term" : "baz",
+      "count" : 1
+    } ]
+  }
+}
+
+===============================
+curl -X POST "http://localhost:9200/atpic/pic/_search?pretty=true" -d '
+  {
+    "query" : { "query_string" : {"query" : "user:1 AND file_1:avignon"} }
+  }
+'
+
+curl -X POST "http://localhost:9200/atpic/pic/_search?pretty=true" -d '
+  {
+    "query" : { "query_string" : {"query" : "user:1 AND file_1:avignon"} },
+    "facets" : {
+      "myfiles" : { "terms" : {"field" : "file_2"} }
+    }
+  }
+'
+# now limit the number of docs shown per facet:
+
+curl -X POST "http://localhost:9200/atpic/pic/_search?pretty=true" -d '
+  {
+    "query" : { "query_string" : {"query" : "user:1 AND file_1:avignon"} },
+    "facets" : {
+      "myfiles" : { "terms" : {"field" : "file_2", "size": 1 } }
+    }
+  }
+'
+DOES NOT WORK
+
+
+
+curl -X POST "http://localhost:9200/atpic/pic/_search?pretty=true" -d '
+  {
+    "query" : { "query_string" : {"query" : "user:1 AND file_1:avignon"} },
+    "size" : 1,
+    "facets" : {
+      "myfiles" : { "terms" : {"field" : "file_2"} }
+    }
+  }
+'
+
+
+================
+
+More complex queries in elasticsearch can be accomplished by including the query in the request body. A filtered query using facets, sorting and from/size (offset/limit) using cURL can look like this:
+
+http://tech.vg.no/2012/07/03/using-elastica-to-query-elasticsearch/
+
+curl -XPOST 'http://localhost:9200/blog/posts/_search' -d '{
+  "query": {
+    "filtered": {
+      "query": {
+        "query_string": {
+          "query":"php zend framework",
+          "default_operator": "OR",
+          "fields": ["title", "content"]
+        }
+      },
+      "filter": {
+        "range": {
+          "published": {
+            "from": "2012-01-01 00:00:00",
+            "to": "2013-01-01 00:00:00"
+          }
+        }
+      }
+    }
+  },
+  "facets": {
+    "categories": {
+      "terms": {
+        "field": "categories.na"
+      }
+    },
+    "months": {
+      "date_histogram": {
+        "field": "published",
+        "interval": "month"
+      }
+    }
+  },
+  "sort":{
+    "published": {
+      "order": "desc"
+    },
+    "title.na": "asc"
+  },
+  "from": "0",
+  "size": "25"
+}'
+
+
+
+
+curl -X POST "http://localhost:9200/atpic/pic/_search?pretty=true" -d '
+  {
+    "query" : { "match_all" : { } },
+    "facets" : {
+      "tags" : { "terms" : {"field" : "coord_1"} }
+    }
+  }
+'
+
+curl -X POST "http://localhost:9200/atpic/pic/_search?pretty=true" -d '
+  {
+    "query" : { "match_all" : { } },
+    "size": 0,  
+    "facets" : {
+      "tags" : { "statistical" : {"field" : "coord_5"} }
+    }
+  }
+'
+returns:
+
+  "facets" : {
+    "tags" : {
+      "_type" : "statistical",
+      "count" : 2073,
+      "total" : -265344.0,
+      "min" : -128.0,
+      "max" : -128.0,
+      "mean" : -128.0,
+      "sum_of_squares" : 3.3964032E7,
+      "variance" : 0.0,
+      "std_deviation" : 0.0
+    }
+
+
+
+curl -X POST "http://localhost:9200/atpic/pic/_search?pretty=true" -d '
+  {
+    "query" : { "match_all" : { } },
+    "size": 0,
+    "facets" : {
+      "tags" : { "terms_stats" : {"key_field" : "coord_4", "value_field" : "coord_4"} }
+    }
+  }
+'
+retruns:
+  "facets" : {
+    "tags" : {
+      "_type" : "terms_stats",
+      "missing" : 0,
+      "terms" : [ {
+        "term" : -128,
+        "count" : 2073,
+        "total_count" : 2073,
+        "min" : -128.0,
+        "max" : -128.0,
+        "total" : -265344.0,
+        "mean" : -128.0
+      } ]
+    }
+
+
+
+
+
+
+
+
+
+curl -X POST "http://localhost:9200/atpic/pic/_search?pretty=true" -d '
+  {
+    "query" : { "match_all" : { } },
+    "size": 0,
+    "facets" : {
+      "tags" : { "terms_stats" : {"key_field" : "coord_20", "value_field" : "coord_21"} }
+    }
+  }
+'
+
