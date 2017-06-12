@@ -34,3 +34,8 @@ https://www.cvedetails.com/vulnerability-list/vendor_id-1749/Imagemagick.html
 
 * investigate replacing QEMU with docker containers
 * need better scaling or clustering
+* work on the presentation layer
+* try a presentation with angular2
+* work on usability
+* populate the wiki with a good documentation
+* document the API with swagger/OpenAPI Specification(OAS)
