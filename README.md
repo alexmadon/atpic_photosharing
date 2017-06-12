@@ -19,7 +19,9 @@ This is the python source code of `atpic.com` (http://atpic.com) a phot sharing 
 ## Technologies Used
 
 * python3 with several Ctypes drivers
+* uwsgi with nginx
 * elasticsearch for search
+* powerdns
 * pyparsing for search grammar
 * redis
 * virtualization (qemu) for the transformation layer. Look at the list of security bugs to convince you you should not run that in a non secured layer
